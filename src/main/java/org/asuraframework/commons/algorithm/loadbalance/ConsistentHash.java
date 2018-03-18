@@ -86,11 +86,11 @@ public class ConsistentHash {
     public IBalanceNode select(@Nonnull String key) {
         Objects.requireNonNull(key, "select key must not null");
         long hash = getHash(key);
-        long selectKey;
         // 存在直接获取
         if (virtualNodes.containsKey(hash)) {
             return virtualNodes.get(hash);
         }
+        long selectKey;
         // 否则从子Map获取下一个节点
         SortedMap<Long, IBalanceNode> sortedMap = virtualNodes.tailMap(hash);
         if (Check.isNullOrEmpty(sortedMap)) {
