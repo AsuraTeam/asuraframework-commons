@@ -1,9 +1,4 @@
 /**
- * @FileName: RoundRobin.java
- * @Package: org.asuraframework.commons.algorithm
- * @author liusq23
- * @created 2018/3/12 上午12:05
- * <p>
  * Copyright 2018 asura
  */
 package org.asuraframework.commons.algorithm.loadbalance;
@@ -22,31 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 1、首先求得索引节点权重的最大公约数（GCD），
  * 2、初始化CW=Wmax，选择权重最大的Smax（Wmax）节点（可能多个）开始调度，当轮询完一轮多个节点后，
  * 3、CW（当前权重-GCD），进行第二轮调度，直到CW=0，再次进行第2步骤操作
- * 伪代码如下：
- * // i初始化为N-1 这能直接进入 i==0 使得CW初始化为Wmax
- * while(true){
- * i = (i+1) mod n
- * if(i == 0){
- * CW = CW-GCD(S)
- * if(CW <=0){
- * CW = Wmax
- * if (cw == 0)
- * return NULL;
- * }
- * }
- * if(Wi >= cw){
- * return Si
- * }
- * }
- * <p>
- * <p>
  * </p>
- * <p>
- * <PRE>
- * <BR>	修改记录
- * <BR>-----------------------------------------------
- * <BR>	修改日期			修改人			修改内容
- * </PRE>
  *
  * @author liusq23
  * @version 1.0
@@ -58,56 +29,95 @@ public class RoundRobin {
     /**
      * 记录上一个选择的Node节点从0开始计数
      */
-    public AtomicInteger currentNode = new AtomicInteger(0);
+    public final AtomicInteger currentNode = new AtomicInteger(0);
     /**
      * 记录当前选择的权重
      */
-    public AtomicInteger currentWeight = new AtomicInteger(0);
+    public final AtomicInteger currentWeight = new AtomicInteger(0);
 
     /**
      * 参与负载均衡的node列表
      */
-    public List<IBalanceNode> nodes;
+    public final List<IBalanceNode> nodes;
+    /**
+     * 计算得出的最大公约数
+     */
+    private final int gcd;
+    /**
+     * 最大权重
+     */
+    private final int maxWeight;
 
     /**
-     * @param currentNode
-     * @param currentWeight
      * @param nodes
      */
-    public RoundRobin(int currentNode, int currentWeight, @Nonnull List<IBalanceNode> nodes) {
+    public RoundRobin(@Nonnull List<IBalanceNode> nodes) {
         if (Check.isNullOrEmpty(nodes)) {
             throw new IllegalArgumentException("nodes must not null or empty");
         }
-        this.currentNode = new AtomicInteger(currentNode);
-        this.currentWeight = new AtomicInteger(currentWeight);
         this.nodes = nodes;
+        this.gcd = greatestCommonDivisor(nodes.size());
+        this.maxWeight = getMaxWeight();
     }
 
     /**
-     * round rodin
-     */
-    private RoundRobin(@Nonnull List<IBalanceNode> nodes) {
-        this(0, 0, nodes);
-    }
-
-    /**
-     * 需要保证多线程下的安全性
-     *
      * @return
      */
     public IBalanceNode select() {
-        int nodeIndex = currentNode.get() % nodes.size();
-
-        return null;
+        while (true) {
+            int modNodeIndex = currentNode.getAndIncrement() % nodes.size();
+            IBalanceNode node = nodes.get(modNodeIndex);
+            // 一轮结束，降低权重，开始轮循
+            if (modNodeIndex == 0 && maxWeight > 0) {
+                int weight = currentWeight.addAndGet(-gcd);
+                // 考虑weight为0情况
+                if (weight < 0) {
+                    currentWeight.compareAndSet(weight, maxWeight);
+                }
+            }
+            if (node.getWeight() >= currentWeight.get()) {
+                return node;
+            }
+        }
     }
 
-    public int getCurrentNode() {
-        return currentNode.get();
+    /**
+     * 获取所有Node之间的最大公约数
+     *
+     * @return
+     */
+    private int greatestCommonDivisor(int index) {
+        if (index == 0) {
+            return nodes.get(0).getWeight();
+        }
+        int numa = nodes.get(index - 1).getWeight();
+        int numb = greatestCommonDivisor(index - 1);
+        return greatestCommonDivisor(numa, numb);
+    }
+
+    /**
+     * 获取两个数字间最大公约数
+     *
+     * @return
+     */
+    private int greatestCommonDivisor(int numa, int numb) {
+        int max = numa > numb ? numa : numb;
+        int min = numa > numb ? numb : numa;
+        while (min != 0 && max % min != 0) {
+            int temp = max % min;
+            max = min;
+            min = temp;
+        }
+        return min;
     }
 
 
-    public int getCurrentWeight() {
-        return currentWeight.get();
+    public int getMaxWeight() {
+        int maxWeight = 0;
+        for (int i = 0; i < nodes.size(); i++) {
+            int nodeWeight = nodes.get(i).getWeight();
+            maxWeight = maxWeight > nodeWeight ? maxWeight : nodeWeight;
+        }
+        return maxWeight;
     }
-
 }

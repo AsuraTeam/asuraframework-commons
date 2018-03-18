@@ -43,12 +43,12 @@ public class ConsistentHash {
     /**
      * 参与负载均衡的虚拟节点
      */
-    private TreeMap<Long, IBalanceNode> virtualNodes;
+    private final TreeMap<Long, IBalanceNode> virtualNodes;
 
     /**
      * 初始化Hash算法murmurhash
      */
-    private HashFunction hf = Hashing.murmur3_128();
+    private final HashFunction hashFunction = Hashing.murmur3_128();
 
     /**
      * 默认放大160倍
@@ -71,7 +71,7 @@ public class ConsistentHash {
         // 虚拟化节点
         for (IBalanceNode node : nodes) {
             for (int i = 0; i < virtualTimes; i++) {
-                String nodeName = node.getNodeName() + i;
+                String nodeName = node.getUniqNodeName() + i;
                 virtualNodes.put(getHash(nodeName), node);
             }
         }
@@ -108,7 +108,7 @@ public class ConsistentHash {
      * @return
      */
     private long getHash(String name) {
-        HashCode hashCode = hf.newHasher().putString(name, Charset.forName("UTF-8")).hash();
+        HashCode hashCode = hashFunction.newHasher().putString(name, Charset.forName("UTF-8")).hash();
         return hashCode.asLong();
     }
 

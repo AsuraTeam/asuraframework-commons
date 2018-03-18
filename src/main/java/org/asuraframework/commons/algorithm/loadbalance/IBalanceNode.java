@@ -23,8 +23,9 @@ public interface IBalanceNode {
 
     /**
      * 获取node节点的名称,作为Hash使用
+     * 节点名称必须唯一
      * @return
      */
-    String getNodeName();
+    String getUniqNodeName();
 
 }
