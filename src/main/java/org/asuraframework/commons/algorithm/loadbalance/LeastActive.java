@@ -1,9 +1,4 @@
 /**
- * @FileName: LeastActive.java
- * @Package: org.asuraframework.commons.algorithm.loadbalance
- * @author liusq23
- * @created 2018/3/14 下午5:48
- * <p>
  * Copyright 2018 asura
  */
 package org.asuraframework.commons.algorithm.loadbalance;
@@ -21,14 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * {S1,S2,S3...Sn}n台机器，{W1,W2,W3...Wn}对应n台机器的使用次数
  * 算法核心：
  * 记录每台机器的使用次数，每次获取出最少使用的机器，进行权重计算，选择其中一台
- * <p>
  * </p>
- * <p>
- * <PRE>
- * <BR>	修改记录
- * <BR>-----------------------------------------------
- * <BR>	修改日期			修改人			修改内容
- * </PRE>
  *
  * @author liusq23
  * @version 1.0
