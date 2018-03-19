@@ -126,4 +126,12 @@ public class AsuraBeanUtilsTest {
     }
 
 
+    @Test(expected = BeanUtilsCopyException.class)
+    public void testCopierList4() {
+        AddressEntity entity = new AddressEntity();
+        entity.setAddreddId(1);
+        entity.setAddressName("address name");
+        entity.setLongitude(101.12122f);
+        AsuraBeanUtils.copyProperties(entity, AddressDto2.class);
+    }
 }
