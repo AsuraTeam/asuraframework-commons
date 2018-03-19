@@ -20,7 +20,7 @@ import java.util.List;
  * @version V1.0
  * @date 2018/3/19 19:43
  */
-public interface IJson {
+public interface JsonInterface {
     /**
      * 将json转换成Object
      *

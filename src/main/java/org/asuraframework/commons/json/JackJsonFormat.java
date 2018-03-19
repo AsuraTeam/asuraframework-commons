@@ -30,8 +30,8 @@ import java.util.List;
  * @version V1.0
  * @date 2018/3/19 19:43
  */
-public class JackJson implements IJson{
-    private static JackJson jackJsonUtil;
+public class JackJsonFormat implements JsonInterface {
+    private static JackJsonFormat jackJsonFormat;
     private static ObjectMapper objectMapper;
 
     static {
@@ -46,16 +46,16 @@ public class JackJson implements IJson{
         objectMapper.setDateFormat(new SimpleDateFormat(DatePattern.DEFAULT_ISO8601_FORMAT));
     }
 
-    private JackJson() {
+    private JackJsonFormat() {
 
     }
 
 
-    public synchronized static JackJson getInstance(){
-        if(jackJsonUtil==null){
-            jackJsonUtil=new JackJson();
+    public synchronized static JackJsonFormat getInstance(){
+        if(jackJsonFormat==null){
+            jackJsonFormat=new JackJsonFormat();
         }
-        return  jackJsonUtil;
+        return  jackJsonFormat;
     }
 
     /**
