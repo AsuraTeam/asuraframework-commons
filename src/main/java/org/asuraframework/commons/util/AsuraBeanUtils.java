@@ -20,7 +20,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * 3、目标对象相对源对象多余的属性会默认null，不会异常
  * </p>
  *
- *
  * @author liusq23
  * @version 1.0
  * @since 1.0
@@ -32,8 +31,10 @@ public class AsuraBeanUtils {
      */
     private static final ConcurrentHashMap<String, BeanCopier> BEAN_COPIER_MAP = new ConcurrentHashMap<>();
 
-    private AsuraBeanUtils(){
+
+    private AsuraBeanUtils() {
     }
+
     /**
      * 执行属性拷贝
      *
@@ -44,7 +45,7 @@ public class AsuraBeanUtils {
      * @return
      * @throws BeanUtilsCopyException
      */
-    public static <T, K> T copyProperties(@Nonnull K k, Class<T> clazz) throws BeanUtilsCopyException {
+    public static <T, K> T copyProperties(@Nonnull K k, Class<T> clazz) {
         Objects.requireNonNull(k);
         try {
             T t = clazz.getConstructor().newInstance();
@@ -65,7 +66,7 @@ public class AsuraBeanUtils {
      * @return
      * @throws BeanUtilsCopyException
      */
-    public static <T, K> List<T> copyProperties(List<K> ks, Class<T> clazz) throws BeanUtilsCopyException {
+    public static <T, K> List<T> copyProperties(List<K> ks, Class<T> clazz) {
         if (Check.isNullOrEmpty(ks)) {
             return new ArrayList<>();
         }
