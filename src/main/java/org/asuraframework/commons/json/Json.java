@@ -5,10 +5,11 @@ package org.asuraframework.commons.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
-
+import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 import java.util.List;
+
+;
 
 /**
  * <p>
@@ -42,7 +43,7 @@ public class Json {
      * @param clazz 目标实体
      * @return Entity    转换后的实体对象
      */
-    public static <T> T parseObject(@NotNull String json, @NotNull Class<T> clazz) {
+    public static <T> T parseObject(@Nonnull String json, @Nonnull Class<T> clazz) {
         return  createProduct().parseObject(json,clazz);
     }
     /**
@@ -51,7 +52,7 @@ public class Json {
      * @param object 待转换的对象实体
      * @return json    转换后的json数据
      */
-    public static String toJsonString(@NotNull Object object){
+    public static String toJsonString(@Nonnull Object object){
         return createProduct().toJsonString(object);
     }
     /**
@@ -66,7 +67,7 @@ public class Json {
      * @param clazz 需要转换的类类型
      * @return
      */
-    public static <T> List<T> parseObjectList(@NotNull String json, @NotNull Class<T> clazz) {
+    public static <T> List<T> parseObjectList(@Nonnull String json, @Nonnull Class<T> clazz) {
         return createProduct().parseObjectList(json,clazz);
     }
     /**
@@ -80,7 +81,7 @@ public class Json {
      * @param paths json key 路径path
      * @return
      */
-    public static JsonNode parseJsonNode(@NotNull String json, @Nullable String... paths) {
+    public static JsonNode parseJsonNode(@Nonnull String json, @Nullable String... paths) {
         return createProduct().parseJsonNode(json,paths);
     }
     /**
@@ -92,7 +93,7 @@ public class Json {
      * @param <T>
      * @return
      */
-    public static <T> T getPathObject(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) {
+    public static <T> T getPathObject(@Nonnull String json, @Nonnull Class<T> t, @Nullable String... paths) {
         return createProduct().getPathObject(json,t,paths);
     }
     /**
@@ -104,7 +105,7 @@ public class Json {
      * @param <T>
      * @return
      */
-    public static <T> T getPathObject(@NotNull String json, @NotNull TypeReference typeReference, @Nullable String... paths) {
+    public static <T> T getPathObject(@Nonnull String json, @Nonnull TypeReference typeReference, @Nullable String... paths) {
         return createProduct().getPathObject(json,typeReference,paths);
     }
     /**
@@ -116,7 +117,7 @@ public class Json {
      * @param <T>
      * @return
      */
-    public static <T> List<T> getPathArray(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) {
+    public static <T> List<T> getPathArray(@Nonnull String json, @Nonnull Class<T> t, @Nullable String... paths) {
         return createProduct().getPathArray(json,t,paths);
     }
     /**
@@ -126,31 +127,31 @@ public class Json {
      * @param paths
      * @return
      */
-    public static Integer getInt(@NotNull String json, @Nullable String... paths) {
+    public static Integer getInt(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getInt(json,paths);
     }
 
-    public static Long getLong(@NotNull String json, @Nullable String... paths) {
+    public static Long getLong(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getLong(json,paths);
     }
 
-    public static Short getShort(@NotNull String json, @Nullable String... paths) {
+    public static Short getShort(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getShort(json,paths);
     }
 
-    public static Byte getByte(@NotNull String json, @Nullable String... paths) {
+    public static Byte getByte(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getByte(json,paths);
     }
 
-    public static Float getFloat(@NotNull String json, @Nullable String... paths) {
+    public static Float getFloat(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getFloat(json,paths);
     }
 
-    public static Double getDouble(@NotNull String json, @Nullable String... paths) {
+    public static Double getDouble(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getDouble(json,paths);
     }
 
-    public static Boolean getBoolean(@NotNull String json, @Nullable String... paths) {
+    public static Boolean getBoolean(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getBoolean(json,paths);
     }
     /**
@@ -162,7 +163,7 @@ public class Json {
      * @param paths
      * @return
      */
-    public static String getString(@NotNull String json, @Nullable String... paths) {
+    public static String getString(@Nonnull String json, @Nullable String... paths) {
         return createProduct().getString(json,paths);
     }
 

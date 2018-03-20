@@ -9,16 +9,17 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 import org.asuraframework.commons.date.DatePattern;
 import org.asuraframework.commons.exception.JsonTransformException;
 import org.asuraframework.commons.util.Check;
-
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+;
 
 /**
  * <p>
@@ -66,7 +67,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return Entity    转换后的实体对象
      */
     @Override
-    public  <T> T parseObject(@NotNull String json, @NotNull Class<T> clazz) {
+    public  <T> T parseObject(@Nonnull String json, @Nonnull Class<T> clazz) {
         try {
             return objectMapper.readValue(json, clazz);
         } catch (IOException e) {
@@ -81,7 +82,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return json    转换后的json数据
      */
     @Override
-    public  String toJsonString(@NotNull Object object) {
+    public  String toJsonString(@Nonnull Object object) {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (IOException e) {
@@ -102,7 +103,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  <T> List<T> parseObjectList(@NotNull String json, @NotNull Class<T> clazz) {
+    public  <T> List<T> parseObjectList(@Nonnull String json, @Nonnull Class<T> clazz) {
         try {
             return objectMapper.readValue(json, new TypeReference<List<T>>() {
             });
@@ -123,7 +124,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  JsonNode parseJsonNode(@NotNull String json, @Nullable String... paths) {
+    public  JsonNode parseJsonNode(@Nonnull String json, @Nullable String... paths) {
         try {
             JsonNode rootNode = objectMapper.readTree(json);
             if (!Check.isNullOrEmpty(paths)) {
@@ -151,7 +152,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  <T> T getPathObject(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) {
+    public  <T> T getPathObject(@Nonnull String json, @Nonnull Class<T> t, @Nullable String... paths) {
         JsonNode jsonNode = parseJsonNode(json, paths);
         if (Check.isNull(jsonNode) || jsonNode.isNull()) {
             return null;
@@ -176,7 +177,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  <T> T getPathObject(@NotNull String json, @NotNull TypeReference typeReference, @Nullable String... paths) {
+    public  <T> T getPathObject(@Nonnull String json, @Nonnull TypeReference typeReference, @Nullable String... paths) {
         String pathJson = getString(json, paths);
         if (Check.isNull(pathJson)) {
             return null;
@@ -201,7 +202,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  <T> List<T> getPathArray(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) {
+    public  <T> List<T> getPathArray(@Nonnull String json, @Nonnull Class<T> t, @Nullable String... paths) {
         JsonNode jsonNode = parseJsonNode(json, paths);
         if (Check.isNull(jsonNode) || jsonNode.isNull()) {
             return null;
@@ -229,7 +230,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Integer getInt(@NotNull String json, @Nullable String... paths) {
+    public  Integer getInt(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Integer.class, paths);
     }
 
@@ -239,7 +240,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Long getLong(@NotNull String json, @Nullable String... paths) {
+    public  Long getLong(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Long.class, paths);
     }
 
@@ -249,7 +250,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Short getShort(@NotNull String json, @Nullable String... paths) {
+    public  Short getShort(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Short.class, paths);
     }
 
@@ -259,7 +260,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Byte getByte(@NotNull String json, @Nullable String... paths) {
+    public  Byte getByte(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Byte.class, paths);
     }
 
@@ -270,7 +271,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Float getFloat(@NotNull String json, @Nullable String... paths) {
+    public  Float getFloat(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Float.class, paths);
     }
 
@@ -280,7 +281,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Double getDouble(@NotNull String json, @Nullable String... paths) {
+    public  Double getDouble(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Double.class, paths);
     }
 
@@ -292,7 +293,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  Boolean getBoolean(@NotNull String json, @Nullable String... paths) {
+    public  Boolean getBoolean(@Nonnull String json, @Nullable String... paths) {
         return getPathObject(json, Boolean.class, paths);
     }
 
@@ -306,7 +307,7 @@ public class JackJsonFormat implements JsonInterface {
      * @return
      */
     @Override
-    public  String getString(@NotNull String json, @Nullable String... paths) {
+    public  String getString(@Nonnull String json, @Nullable String... paths) {
         JsonNode jsonNode = parseJsonNode(json, paths);
         if (Check.isNull(jsonNode) || jsonNode.isNull()) {
             return null;
