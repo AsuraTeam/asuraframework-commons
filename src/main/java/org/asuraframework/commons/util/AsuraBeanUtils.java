@@ -70,16 +70,12 @@ public class AsuraBeanUtils {
         if (Check.isNullOrEmpty(ks)) {
             return new ArrayList<>();
         }
-        try {
-            List<T> ts = new ArrayList<>(ks.size());
-            for (K k : ks) {
-                T t = copyProperties(k, clazz);
-                ts.add(t);
-            }
-            return ts;
-        } catch (Exception e) {
-            throw new BeanUtilsCopyException(e);
+        List<T> ts = new ArrayList<>(ks.size());
+        for (K k : ks) {
+            T t = copyProperties(k, clazz);
+            ts.add(t);
         }
+        return ts;
     }
 
     /**
