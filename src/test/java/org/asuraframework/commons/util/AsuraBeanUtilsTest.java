@@ -78,7 +78,7 @@ public class AsuraBeanUtilsTest {
     /**
      * 测试 target 少属性情况
      */
-    @Test(expected = BeanUtilsCopyException.class)
+    @Test(expected = NullPointerException.class)
     public void testCopierList() {
         List<UserEntity> userEntities = new ArrayList<>();
         UserEntity userEntity = new UserEntity();
