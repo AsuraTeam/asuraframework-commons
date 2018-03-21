@@ -44,18 +44,20 @@ public class ConsistentHashTest {
         IBalanceNode node = consistentHash.select("keyX");
         IBalanceNode node2 = consistentHash.select("keyX");
         IBalanceNode node3 = consistentHash.select("key1");
+        IBalanceNode node4 = consistentHash.select("name1100");
         Assert.assertNotNull(node);
         Assert.assertEquals(node2, node);
         Assert.assertNotEquals(node, node3);
+        Assert.assertNotNull(node4);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void selectTest1() {
+    public void select1Test() {
         new ConsistentHash(new ArrayList<>());
     }
 
     @Test
-    public void selectTest3() {
+    public void select3Test() {
         ConsistentHash consistentHash = new ConsistentHash(nodes);
         Map<String, Integer> map = new HashMap<>();
         int totalSelectNum = 10000;
@@ -75,4 +77,5 @@ public class ConsistentHashTest {
         }
         Assert.assertEquals(selectNum,totalSelectNum);
     }
+
 }

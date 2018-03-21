@@ -5,6 +5,8 @@ package org.asuraframework.commons.algorithm.loadbalance;
 
 import com.google.common.annotations.Beta;
 import org.asuraframework.commons.util.Check;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Beta
 public class RoundRobin {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoundRobin.class);
     /**
      * 记录上一个选择的Node节点从0开始计数
      */
@@ -66,16 +69,29 @@ public class RoundRobin {
     public IBalanceNode select() {
         while (true) {
             int modNodeIndex = currentNode.getAndIncrement() % nodes.size();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("current mod index is {},maxWeight is {}", modNodeIndex, maxWeight);
+            }
             IBalanceNode node = nodes.get(modNodeIndex);
             // 一轮结束，降低权重，开始轮循
             if (modNodeIndex == 0 && maxWeight > 0) {
                 int weight = currentWeight.addAndGet(-gcd);
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("current weight minus greatest common divisor is {}", weight);
+                }
                 // 考虑weight为0情况
-                if (weight < 0) {
+                if (weight <= 0) {
                     currentWeight.compareAndSet(weight, maxWeight);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("weight gt 0 ,reset {}", currentWeight);
+                    }
                 }
             }
+
             if (node.getWeight() >= currentWeight.get()) {
+                if (LOGGER.isInfoEnabled()) {
+                    LOGGER.info("node {} selected", node.getUniqNodeName());
+                }
                 return node;
             }
         }

@@ -8,6 +8,8 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 import org.asuraframework.commons.util.Check;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.Nonnull;
 import java.nio.charset.Charset;
@@ -35,6 +37,7 @@ import java.util.TreeMap;
 @Beta
 public class ConsistentHash {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsistentHash.class);
     /**
      * 默认160个
      */
@@ -75,6 +78,9 @@ public class ConsistentHash {
                 virtualNodes.put(getHash(nodeName), node);
             }
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("virtualNodes map is {}", virtualNodes);
+        }
     }
 
     /**
@@ -86,19 +92,36 @@ public class ConsistentHash {
     public IBalanceNode select(@Nonnull String key) {
         Objects.requireNonNull(key, "select key must not null");
         long hash = getHash(key);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("current hash by key {} is {}", key, hash);
+        }
         // 存在直接获取
         if (virtualNodes.containsKey(hash)) {
-            return virtualNodes.get(hash);
+            IBalanceNode node = virtualNodes.get(hash);
+            if (LOGGER.isInfoEnabled()) {
+                LOGGER.info("contains key,select node is {}", node.getUniqNodeName());
+            }
+            return node;
         }
         long selectKey;
         // 否则从子Map获取下一个节点
         SortedMap<Long, IBalanceNode> sortedMap = virtualNodes.tailMap(hash);
         if (Check.isNullOrEmpty(sortedMap)) {
             selectKey = virtualNodes.firstKey();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("sortedMap is empty by hash {},select key is {}", hash, selectKey);
+            }
         } else {
             selectKey = sortedMap.firstKey();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("select key is {} ", selectKey);
+            }
         }
-        return virtualNodes.get(selectKey);
+        IBalanceNode node = virtualNodes.get(selectKey);
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("select node is {}", node.getUniqNodeName());
+        }
+        return node;
     }
 
     /**

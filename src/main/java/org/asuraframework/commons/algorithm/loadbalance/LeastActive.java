@@ -4,6 +4,8 @@
 package org.asuraframework.commons.algorithm.loadbalance;
 
 import org.asuraframework.commons.util.Check;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Random;
@@ -23,6 +25,8 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 1.0
  */
 public class LeastActive {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(LeastActive.class);
     /**
      * 记录节点活跃数
      */
@@ -52,28 +56,37 @@ public class LeastActive {
      * @return
      */
     public IBalanceNode select() {
-        int leastAtive = -1;
+        int leastActive = -1;
         int leastCount = 0;
         int totalWeight = 0;
         int firstWeight = 0;
         boolean sameWeight = true;
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("current map is {}", activeMap);
+        }
         int[] leastIndex = new int[nodes.size()];
         for (int i = 0; i < nodes.size(); i++) {
             IBalanceNode node = nodes.get(i);
             int nodeWeight = node.getWeight();
             int active = activeMap.get(node.getUniqNodeName()).get();
             // 如果比当前活跃数更小
-            if (leastAtive == -1 || active < leastAtive) {
-                leastAtive = active;
+            if (leastActive == -1 || active < leastActive) {
+                leastActive = active;
                 leastCount = 1;
                 totalWeight = nodeWeight;
                 firstWeight = nodeWeight;
                 leastIndex[0] = i;
-            } else if (active == leastAtive) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("find new least active is {},index {},weight {}", leastActive, i, nodeWeight);
+                }
+            } else if (active == leastActive) {
                 totalWeight += nodeWeight;
                 leastIndex[leastCount++] = i;
                 if (sameWeight && i > 0 && nodeWeight != firstWeight) {
                     sameWeight = false;
+                }
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("find more least active node weight {},index {},sameWeight {}", nodeWeight, i, sameWeight);
                 }
             }
         }
@@ -85,17 +98,25 @@ public class LeastActive {
         // 处理权重不同的负载
         if (!sameWeight && totalWeight > 0) {
             int offsetWeight = random.nextInt(totalWeight);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("current offsetWeight after random is {}", offsetWeight);
+            }
             for (int i = 0; i < leastCount; i++) {
                 int index = leastIndex[i];
-                offsetWeight -= nodes.get(index).getWeight();
+                int weight = nodes.get(index).getWeight();
+                offsetWeight -= weight;
                 if (offsetWeight <= 0) {
                     selectNode = nodes.get(index);
+                    break;
                 }
             }
         }
         // 权重相同，随机选一个
         if (selectNode == null) {
             selectNode = nodes.get(leastIndex[random.nextInt(leastCount)]);
+        }
+        if (LOGGER.isInfoEnabled()) {
+            LOGGER.info("select node: {}", selectNode.getUniqNodeName());
         }
         activeMap.get(selectNode.getUniqNodeName()).incrementAndGet();
         return selectNode;

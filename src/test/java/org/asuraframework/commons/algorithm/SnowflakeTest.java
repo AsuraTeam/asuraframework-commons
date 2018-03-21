@@ -6,7 +6,7 @@
  * <p>
  * Copyright 2018 asura
  */
-package org.asuraframework.commons;
+package org.asuraframework.commons.algorithm;
 
 import org.asuraframework.commons.algorithm.Snowflake;
 import org.junit.Assert;

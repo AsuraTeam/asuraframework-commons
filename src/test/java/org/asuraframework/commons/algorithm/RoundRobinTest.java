@@ -40,7 +40,7 @@ public class RoundRobinTest {
     public void selectTest() {
         RoundRobin roundRobin = new RoundRobin(nodes);
         Map<String, Integer> map = new HashMap<>();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 100; i++) {
             IBalanceNode node = roundRobin.select();
             Integer inte = map.get(node.getUniqNodeName());
             if (inte == null) {
@@ -66,5 +66,9 @@ public class RoundRobinTest {
         Assert.assertEquals(selectNum, 100);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void initTest(){
+        new RoundRobin(new ArrayList<>());
+    }
 
 }
