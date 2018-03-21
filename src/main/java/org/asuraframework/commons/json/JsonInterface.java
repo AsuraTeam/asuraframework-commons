@@ -2,8 +2,6 @@ package org.asuraframework.commons.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
 
 import java.util.List;
 
@@ -28,14 +26,14 @@ public interface JsonInterface {
      * @param clazz 目标实体
      * @return Entity    转换后的实体对象
      */
-      <T> T parseObject(@NotNull String json, @NotNull Class<T> clazz) ;
+      <T> T parseObject( String json,  Class<T> clazz) ;
     /**
      * 将自定义对象转json
      *
      * @param object 待转换的对象实体
      * @return json    转换后的json数据
      */
-      String toJsonString(@NotNull Object object);
+      String toJsonString( Object object);
 
     /**
      * json转换list通用
@@ -49,7 +47,7 @@ public interface JsonInterface {
      * @param clazz 需要转换的类类型
      * @return
      */
-    <T> List<T> parseObjectList(@NotNull String json, @NotNull Class<T> clazz) ;
+    <T> List<T> parseObjectList( String json,  Class<T> clazz) ;
 
     /**
      * 可以取出类似与fastjson JSONObject类似的一个node tree
@@ -62,7 +60,7 @@ public interface JsonInterface {
      * @param paths json key 路径path
      * @return
      */
-    public JsonNode parseJsonNode(@NotNull String json, @Nullable String... paths) ;
+    public JsonNode parseJsonNode( String json,  String... paths) ;
 
     /**
      * 将json串内的某一个path下的json串转换为 object
@@ -73,7 +71,7 @@ public interface JsonInterface {
      * @param <T>
      * @return
      */
-    <T> T getPathObject(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) ;
+    <T> T getPathObject( String json,  Class<T> t,  String... paths) ;
 
 
     /**
@@ -85,7 +83,7 @@ public interface JsonInterface {
      * @param <T>
      * @return
      */
-    <T> T getPathObject(@NotNull String json, @NotNull TypeReference typeReference, @Nullable String... paths);
+    <T> T getPathObject( String json,  TypeReference typeReference,  String... paths);
 
 
     /**
@@ -97,7 +95,7 @@ public interface JsonInterface {
      * @param <T>
      * @return
      */
-    <T> List<T> getPathArray(@NotNull String json, @NotNull Class<T> t, @Nullable String... paths) ;
+    <T> List<T> getPathArray( String json,  Class<T> t,  String... paths) ;
 
     /**
      * 获取json串内的某一个path下的integer值
@@ -106,28 +104,28 @@ public interface JsonInterface {
      * @param paths
      * @return
      */
-    Integer getInt(@NotNull String json, @Nullable String... paths) ;
+    Integer getInt( String json,  String... paths) ;
 
     /**
      * @param json
      * @param paths
      * @return
      */
-    Long getLong(@NotNull String json, @Nullable String... paths);
+    Long getLong( String json,  String... paths);
 
     /**
      * @param json
      * @param paths
      * @return
      */
-    Short getShort(@NotNull String json, @Nullable String... paths);
+    Short getShort( String json,  String... paths);
 
     /**
      * @param json
      * @param paths
      * @return
      */
-    Byte getByte(@NotNull String json, @Nullable String... paths);
+    Byte getByte( String json,  String... paths);
 
 
     /**
@@ -135,14 +133,14 @@ public interface JsonInterface {
      * @param paths
      * @return
      */
-    Float getFloat(@NotNull String json, @Nullable String... paths);
+    Float getFloat( String json,  String... paths);
 
     /**
      * @param json
      * @param paths
      * @return
      */
-    Double getDouble(@NotNull String json, @Nullable String... paths);
+    Double getDouble( String json,  String... paths);
 
     /**
      * 获取Boolean值
@@ -151,7 +149,7 @@ public interface JsonInterface {
      * @param paths
      * @return
      */
-    Boolean getBoolean(@NotNull String json, @Nullable String... paths) ;
+    Boolean getBoolean( String json,  String... paths) ;
 
     /**
      * 获取json传 K-V 的V值只适应于获取叶子节点的V值
@@ -162,5 +160,5 @@ public interface JsonInterface {
      * @param paths
      * @return
      */
-      String getString(@NotNull String json, @Nullable String... paths) ;
+      String getString( String json,  String... paths) ;
 }
