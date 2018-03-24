@@ -1,17 +1,9 @@
 /*
- * Copyright (c) 2016. www.ziroom.com.
+ * Copyright (c) 2018. asura
  */
 package org.asuraframework.commons.date;
 
 /**
- * <p></p>
- *
- * <PRE>
- * <BR>	修改记录
- * <BR>-----------------------------------------------
- * <BR>	修改日期			修改人			修改内容
- * </PRE>
- *
  * @author liusq23
  * @since 1.0
  * @version 1.0
@@ -19,7 +11,13 @@ package org.asuraframework.commons.date;
 public class DatePattern {
 
     /**
-     * 日期
+     * 私有化构造
+     */
+    private DatePattern() {
+
+    }
+    /**
+     * 日期 24小时制
      */
     public static final String DEFAULT_FORMAT_DATE_PATTERN = "yyyy-MM-dd";
     /**
@@ -38,13 +36,9 @@ public class DatePattern {
      *毫秒
      */
     public static final String DEFAULT_FORMAT_MILLISECOND_PATTERN = "yyyy-MM-dd HH:mm:ss.sss";
-
+    /**
+     * ISO 国际通行表示法
+     */
     public static final String DEFAULT_ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
 
-    /**
-     * 私有化构造
-     */
-    private DatePattern() {
-
-    }
 }
