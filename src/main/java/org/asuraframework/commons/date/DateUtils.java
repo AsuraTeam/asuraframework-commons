@@ -7,11 +7,9 @@ import com.google.common.annotations.Beta;
 import org.asuraframework.commons.util.Check;
 
 import javax.annotation.Nonnull;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
@@ -105,7 +103,15 @@ public class DateUtils {
          * @return
          */
         public Builder parse(String dataStr, String pattern) {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+            DateTimeFormatter df1 = DateTimeFormatter.ofPattern(pattern);
+            DateTimeFormatter dateTimeFormatter = new DateTimeFormatterBuilder().append(df1)
+                    .parseDefaulting(ChronoField.MONTH_OF_YEAR, 1)
+                    .parseDefaulting(ChronoField.DAY_OF_MONTH, 1)
+                    .parseDefaulting(ChronoField.HOUR_OF_DAY, 0)
+                    .parseDefaulting(ChronoField.MINUTE_OF_HOUR, 0)
+                    .parseDefaulting(ChronoField.SECOND_OF_MINUTE, 0)
+                    .parseDefaulting(ChronoField.MILLI_OF_SECOND, 0)
+                    .toFormatter();
             dateTime = LocalDateTime.parse(dataStr, dateTimeFormatter);
             return this;
         }
@@ -628,8 +634,8 @@ public class DateUtils {
                 withCurrentDate();
             }
             Objects.requireNonNull(datePattern, "date pattern must not null");
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePattern);
-            return dateTimeFormatter.format(dateTime);
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePattern, Locale.getDefault());
+            return ZonedDateTime.of(dateTime, ZoneId.systemDefault()).format(dateTimeFormatter);
         }
     }
 
