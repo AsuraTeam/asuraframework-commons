@@ -5,8 +5,8 @@ package org.asuraframework.commons.date;
 
 /**
  * @author liusq23
- * @since 1.0
  * @version 1.0
+ * @since 1.0
  */
 public class DatePattern {
 
@@ -16,6 +16,7 @@ public class DatePattern {
     private DatePattern() {
 
     }
+
     /**
      * 日期 24小时制
      */
@@ -25,15 +26,15 @@ public class DatePattern {
      */
     public static final String DEFAULT_FORMAT_HOUR_PATTERN = "yyyy-MM-dd HH";
     /**
-     *分钟
+     * 分钟
      */
     public static final String DEFAULT_FORMAT_MINUTE_PATTERN = "yyyy-MM-dd HH:mm";
     /**
-     *秒
+     * 秒
      */
     public static final String DEFAULT_FORMAT_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     /**
-     *毫秒
+     * 毫秒
      */
     public static final String DEFAULT_FORMAT_MILLISECOND_PATTERN = "yyyy-MM-dd HH:mm:ss.sss";
     /**

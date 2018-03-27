@@ -6,27 +6,24 @@ package org.asuraframework.commons.date;
 import com.google.common.annotations.Beta;
 import org.asuraframework.commons.util.Check;
 
+import javax.annotation.Nonnull;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAdjusters;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * <p>
- * 基本是封装了jodaTime的 DateTime类，使用类流式api
+ * 封装了jdk8的 DateTime类，使用类流式api
  * </p>
- * <p>
- * <PRE>
- * <BR>	修改记录
- * <BR>-----------------------------------------------
- * <BR>	修改日期			修改人			修改内容
- * </PRE>
  *
  * @author liusq23
  * @version 1.0
@@ -44,7 +41,10 @@ public class DateUtils {
         return new Builder();
     }
 
+
     public static class Builder {
+
+        private static TemporalField ISO_WEEKFIELDS = WeekFields.ISO.dayOfWeek();
 
         private LocalDateTime dateTime;
 
@@ -53,23 +53,69 @@ public class DateUtils {
             return this;
         }
 
+        /**
+         * 按照指定日期
+         *
+         * @param date
+         * @return
+         */
         public Builder withDate(Date date) {
             Instant instant = date.toInstant();
             dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
             return this;
         }
 
-        public Builder plusYears(int years) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (years == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusYears(years);
+        /**
+         * 按照毫秒数日期
+         *
+         * @param millSeconds
+         * @return
+         */
+        public Builder withDate(long millSeconds) {
+            Instant instant = Instant.ofEpochMilli(millSeconds);
+            dateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
             return this;
         }
 
+        /**
+         * 按照字符串日期 YYYY-MM-DD
+         *
+         * @param dataStr
+         * @return
+         */
+        public Builder parseDate(String dataStr) {
+            return parse(dataStr, DatePattern.DEFAULT_FORMAT_DATE_PATTERN);
+        }
+
+        /**
+         * 按照字符串日期 yyyy-MM-dd HH:mm:ss
+         *
+         * @param dataStr
+         * @return
+         */
+        public Builder parseDateTime(String dataStr) {
+            return parse(dataStr, DatePattern.DEFAULT_FORMAT_DATETIME_PATTERN);
+        }
+
+        /**
+         * 按照字符串日期
+         *
+         * @param dataStr
+         * @param pattern
+         * @return
+         */
+        public Builder parse(String dataStr, String pattern) {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(pattern);
+            dateTime = LocalDateTime.parse(dataStr, dateTimeFormatter);
+            return this;
+        }
+
+        /**
+         * 指定年份
+         *
+         * @param year
+         * @return
+         */
         public Builder withYear(int year) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -78,18 +124,13 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusMonths(int months) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (months == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusMonths(months);
-            return this;
-        }
-
-        public Builder withMonthOfYear(int month) {
+        /**
+         * 指定月份
+         *
+         * @param month
+         * @return
+         */
+        public Builder withMonth(int month) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
@@ -97,17 +138,12 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusWeeks(int weeks) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (weeks == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusWeeks(weeks);
-            return this;
-        }
-
+        /**
+         * 指定一年中的周数
+         *
+         * @param week
+         * @return
+         */
         public Builder withWeekOfYear(int week) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -117,17 +153,12 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusDays(int days) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (days == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusDays(days);
-            return this;
-        }
-
+        /**
+         * 指定月份中的日期
+         *
+         * @param dayOfMonth
+         * @return
+         */
         public Builder withDayOfMonth(int dayOfMonth) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -136,17 +167,12 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusHours(int hours) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (hours == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusHours(hours);
-            return this;
-        }
-
+        /**
+         * 指定一天中的小时
+         *
+         * @param hourOfDay
+         * @return
+         */
         public Builder withHourOfDay(int hourOfDay) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -155,17 +181,12 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusMinutes(int minutes) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (minutes == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusMinutes(minutes);
-            return this;
-        }
-
+        /**
+         * 指定小时中的分钟
+         *
+         * @param minuteOfHour
+         * @return
+         */
         public Builder withMinuteOfHour(int minuteOfHour) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -174,17 +195,12 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plusSeconds(int seconds) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (seconds == 0) {
-                return this;
-            }
-            dateTime = dateTime.plusSeconds(seconds);
-            return this;
-        }
-
+        /**
+         * 指定分钟的秒数
+         *
+         * @param secondOfMinute
+         * @return
+         */
         public Builder withSecondOfMinute(int secondOfMinute) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -193,6 +209,12 @@ public class DateUtils {
             return this;
         }
 
+        /**
+         * 指定毫秒数
+         *
+         * @param millisOfSecond
+         * @return
+         */
         public Builder withMillisOfSecond(int millisOfSecond) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -201,17 +223,18 @@ public class DateUtils {
             return this;
         }
 
-        public Builder plus(long duration) {
-            if (Check.isNull(dateTime)) {
-                withCurrentDate();
-            }
-            if (duration == 0) {
-                return this;
-            }
-            dateTime = dateTime.plus(duration, ChronoField.MILLI_OF_DAY.getBaseUnit());
-            return this;
-        }
-
+        /**
+         * 指定年月日时分秒毫秒
+         *
+         * @param year
+         * @param monthOfYear
+         * @param dayOfMonth
+         * @param hourOfDay
+         * @param minuteOfHour
+         * @param secondOfMinute
+         * @param milliOfSecond
+         * @return
+         */
         public Builder with(int year, int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int milliOfSecond) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -226,73 +249,150 @@ public class DateUtils {
             return this;
         }
 
-        public Builder with(int monthOfYear, int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int milliOfSecond) {
+        /**
+         * 指定年月日
+         *
+         * @param year
+         * @param monthOfYear
+         * @param dayOfMonth
+         * @return
+         */
+        public Builder with(int year, int monthOfYear, int dayOfMonth) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.withYear(monthOfYear)
-                    .withDayOfMonth(dayOfMonth)
-                    .withHour(hourOfDay)
-                    .withMinute(minuteOfHour)
-                    .withSecond(secondOfMinute)
-                    .with(ChronoField.MILLI_OF_SECOND, milliOfSecond);
+            dateTime = dateTime.withYear(year)
+                    .withMonth(monthOfYear)
+                    .withDayOfMonth(dayOfMonth);
             return this;
         }
 
-        public Builder with(int dayOfMonth, int hourOfDay, int minuteOfHour, int secondOfMinute, int milliOfSecond) {
+        /**
+         * 新增年份
+         *
+         * @param years
+         * @return
+         */
+        public Builder plusYears(int years) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.withDayOfMonth(dayOfMonth)
-                    .withHour(hourOfDay)
-                    .withMinute(minuteOfHour)
-                    .withSecond(secondOfMinute)
-                    .with(ChronoField.MILLI_OF_SECOND, milliOfSecond);
+            if (years == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusYears(years);
             return this;
         }
 
-        public Builder withLastDayOfWeek() {
+
+        /**
+         * 增加月份
+         *
+         * @param months
+         * @return
+         */
+        public Builder plusMonths(int months) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            TemporalField field = WeekFields.of(Locale.getDefault()).dayOfWeek();
-            dateTime = dateTime.with(field, 7);
+            if (months == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusMonths(months);
             return this;
         }
 
-        public Builder withFirstDayOfWeek() {
+
+        /**
+         * 增加周数
+         *
+         * @param weeks
+         * @return
+         */
+        public Builder plusWeeks(int weeks) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            TemporalField field = WeekFields.of(Locale.getDefault()).dayOfWeek();
-            dateTime = dateTime.with(field, 1);
+            if (weeks == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusWeeks(weeks);
             return this;
         }
 
-        public Builder withLastMillsOfDay() {
+        /**
+         * 增加天数
+         *
+         * @param days
+         * @return
+         */
+        public Builder plusDays(int days) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.with(LocalTime.MAX);
+            if (days == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusDays(days);
             return this;
         }
 
-        public Builder withFirstMillsOfDay() {
+        /**
+         * 增加小时
+         *
+         * @param hours
+         * @return
+         */
+        public Builder plusHours(int hours) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.with(LocalTime.MIN);
+            if (hours == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusHours(hours);
             return this;
         }
 
-        public Builder withLastDayOfMonth() {
+        /**
+         * 增加分钟数
+         *
+         * @param minutes
+         * @return
+         */
+        public Builder plusMinutes(int minutes) {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.with(TemporalAdjusters.lastDayOfMonth());
+            if (minutes == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusMinutes(minutes);
             return this;
         }
 
+        /**
+         * 增加秒数
+         *
+         * @param seconds
+         * @return
+         */
+        public Builder plusSeconds(int seconds) {
+            if (Check.isNull(dateTime)) {
+                withCurrentDate();
+            }
+            if (seconds == 0) {
+                return this;
+            }
+            dateTime = dateTime.plusSeconds(seconds);
+            return this;
+        }
+
+        /**
+         * 当月的第一天
+         *
+         * @return
+         */
         public Builder withFirstDayOfMonth() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -301,28 +401,77 @@ public class DateUtils {
             return this;
         }
 
-        public Builder with(int hourOfDay, int minuteOfHour, int secondOfMinute, int milliOfSecond) {
+        /**
+         * 当月的最后一天
+         *
+         * @return
+         */
+        public Builder withLastDayOfMonth() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.withHour(hourOfDay)
-                    .withMinute(minuteOfHour)
-                    .withSecond(secondOfMinute)
-                    .with(ChronoField.MILLI_OF_SECOND, milliOfSecond);
+            dateTime = dateTime.with(TemporalAdjusters.lastDayOfMonth());
+            return this;
+        }
+
+        /**
+         * 一周的第一天 周一为第一天
+         *
+         * @return
+         */
+        public Builder withFirstDayOfWeek() {
+            if (Check.isNull(dateTime)) {
+                withCurrentDate();
+            }
+            dateTime = dateTime.with(ISO_WEEKFIELDS, 1);
+            return this;
+        }
+
+        /**
+         * 一周的最后一天 周日为第七天
+         *
+         * @return
+         */
+        public Builder withLastDayOfWeek() {
+            if (Check.isNull(dateTime)) {
+                withCurrentDate();
+            }
+            dateTime = dateTime.with(ISO_WEEKFIELDS, 7);
             return this;
         }
 
 
-        public Builder with(int minuteOfHour, int secondOfMinute, int milliOfSecond) {
+        /**
+         * 一天的最后一毫秒
+         *
+         * @return
+         */
+        public Builder withLastMillsOfDay() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            dateTime = dateTime.withMinute(minuteOfHour)
-                    .withSecond(secondOfMinute)
-                    .with(ChronoField.MILLI_OF_SECOND, milliOfSecond);
+            dateTime = dateTime.with(LocalTime.MAX);
             return this;
         }
 
+        /**
+         * 一天的第0秒
+         *
+         * @return
+         */
+        public Builder withFirstMillsOfDay() {
+            if (Check.isNull(dateTime)) {
+                withCurrentDate();
+            }
+            dateTime = dateTime.with(LocalTime.MIN);
+            return this;
+        }
+
+        /**
+         * 获取年分
+         *
+         * @return
+         */
         public int getYear() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -330,13 +479,23 @@ public class DateUtils {
             return dateTime.getYear();
         }
 
-        public int getMonthOfYear() {
+        /**
+         * 获取月份
+         *
+         * @return
+         */
+        public int getMonth() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
             return dateTime.getMonthValue();
         }
 
+        /**
+         * 获取日期在一年中的多少天
+         *
+         * @return
+         */
         public int getDayOfYear() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -344,6 +503,11 @@ public class DateUtils {
             return dateTime.getDayOfYear();
         }
 
+        /**
+         * 获取日期在一个月中的第几天
+         *
+         * @return
+         */
         public int getDayOfMonth() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -351,13 +515,23 @@ public class DateUtils {
             return dateTime.getDayOfMonth();
         }
 
+        /**
+         * 获取日期是一周中的第几天
+         *
+         * @return
+         */
         public int getDayOfWeek() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            return dateTime.getDayOfWeek().getValue();
+            return dateTime.get(ISO_WEEKFIELDS);
         }
 
+        /**
+         * 获取日期中的小时
+         *
+         * @return
+         */
         public int getHourOfDay() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -365,6 +539,11 @@ public class DateUtils {
             return dateTime.getHour();
         }
 
+        /**
+         * 获取日期中的分钟
+         *
+         * @return
+         */
         public int getMinuteOfHour() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -372,6 +551,11 @@ public class DateUtils {
             return dateTime.getMinute();
         }
 
+        /**
+         * 获取日期中的秒
+         *
+         * @return
+         */
         public int getSecondOfMinute() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -379,13 +563,23 @@ public class DateUtils {
             return dateTime.getSecond();
         }
 
+        /**
+         * 获取日期中的毫秒
+         *
+         * @return
+         */
         public int getMillsOfSecond() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
             }
-            return dateTime.getSecond();
+            return dateTime.get(ChronoField.MILLI_OF_SECOND);
         }
 
+        /**
+         * 获取当前日期
+         *
+         * @return
+         */
         public Date getDate() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -393,6 +587,11 @@ public class DateUtils {
             return Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
         }
 
+        /**
+         * 获取当前日期毫秒数
+         *
+         * @return
+         */
         public long getMillis() {
             if (Check.isNull(dateTime)) {
                 withCurrentDate();
@@ -400,26 +599,38 @@ public class DateUtils {
             return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
         }
 
-//        public String formatDate() {
-//            if (Check.isNull(dateTime)) {
-//                withCurrentDate();
-//            }
-//            return DateFormatter.formatDate(dateTime.toDate());
-//        }
-//
-//        public String formatDateTime() {
-//            if (Check.isNull(dateTime)) {
-//                withCurrentDate();
-//            }
-//            return DateFormatter.formatDateTime(dateTime.toDate());
-//        }
-//
-//        public String format(String datePattern) {
-//            if (Check.isNull(dateTime)) {
-//                withCurrentDate();
-//            }
-//            return DateFormatter.format(dateTime.toDate(), datePattern);
-//        }
+        /**
+         * 格式化为 YYYY-MM-DD
+         *
+         * @return
+         */
+        public String formatDate() {
+            return format(DatePattern.DEFAULT_FORMAT_DATE_PATTERN);
+        }
+
+        /**
+         * 格式化为 yyyy-MM-dd HH:mm:ss
+         *
+         * @return
+         */
+        public String formatDateTime() {
+            return format(DatePattern.DEFAULT_FORMAT_DATETIME_PATTERN);
+        }
+
+        /**
+         * 按照指定日期格式化
+         *
+         * @param datePattern
+         * @return
+         */
+        public String format(@Nonnull String datePattern) {
+            if (Check.isNull(dateTime)) {
+                withCurrentDate();
+            }
+            Objects.requireNonNull(datePattern, "date pattern must not null");
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePattern);
+            return dateTimeFormatter.format(dateTime);
+        }
     }
 
 }
