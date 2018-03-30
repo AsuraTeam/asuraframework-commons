@@ -24,9 +24,15 @@ public class DateParserTest {
         Date d0 = DateParser.parse("1970", "yyyy");
         Date d1 = DateParser.parse("1986-05", "yyyy-MM");
         Date d2 = DateParser.parse("19860504", "yyyyMMdd");
+        Date d3 = DateParser.parse("19860504 00", "yyyyMMdd HH");
+        Date d4 = DateParser.parse("19860504 00:00", "yyyyMMdd HH:mm");
+        Date d5 = DateParser.parse("19860504 00:00:00", "yyyyMMdd HH:mm:ss");
         Assert.assertNotNull(d0);
         Assert.assertNotNull(d1);
         Assert.assertNotNull(d2);
+        Assert.assertNotNull(d3);
+        Assert.assertNotNull(d4);
+        Assert.assertNotNull(d5);
     }
 
 }
