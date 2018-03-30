@@ -24,7 +24,6 @@ public class DateParser {
      * 私有化构造
      */
     private DateParser() {
-
     }
 
     /**

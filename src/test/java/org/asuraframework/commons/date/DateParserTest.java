@@ -6,6 +6,7 @@ package org.asuraframework.commons.date;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.format.DateTimeParseException;
 import java.util.Date;
 
 /**
@@ -35,4 +36,19 @@ public class DateParserTest {
         Assert.assertNotNull(d5);
     }
 
+    @Test
+    public void parse2Test() {
+        Date d0 = DateParser.parseDate("1986-05-04");
+        Date d1 = DateParser.parseDate(null);
+        Date d2 = DateParser.parseDateTime("1986-05-04 00:00:00");
+        Assert.assertNotNull(d0);
+        Assert.assertNotNull(d2);
+        Assert.assertNull(d1);
+    }
+
+    @Test(expected = DateTimeParseException.class)
+    public void parse3Test() {
+        Date d0 = DateParser.parseDate("asdasdsd");
+        Assert.assertNotNull(d0);
+    }
 }

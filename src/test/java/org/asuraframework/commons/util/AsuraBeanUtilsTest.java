@@ -116,8 +116,39 @@ public class AsuraBeanUtilsTest {
         Assert.assertThat(userDtos.get(1).getName(), containsString("name2"));
     }
 
+    /**
+     * 测试同类之间的嵌套类型复制
+     */
     @Test
     public void testCopierList3() {
+        List<UserEntity> userEntities = new ArrayList<>();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUserId(12);
+        userEntity.setEmail("aa@gmail.com");
+        userEntity.setName("user name");
+        UserEntity userEntity2 = new UserEntity();
+        userEntity2.setUserId(13);
+        userEntity2.setEmail("bb@gmail.com");
+        userEntity2.setName("user name2");
+        userEntities.add(userEntity);
+        userEntities.add(userEntity2);
+        AddressEntity entity = new AddressEntity();
+        entity.setAddreddId(1);
+        entity.setAddressName("address name");
+        entity.setLongitude(101.12122f);
+        userEntity.setAddressEntity(entity);
+        List<UserEntity> userDtos = AsuraBeanUtils.copyProperties(userEntities, UserEntity.class);
+        Assert.assertEquals(userDtos.size(), 2);
+        Assert.assertThat(userDtos.get(0).getEmail(), containsString("aa"));
+        Assert.assertThat(userDtos.get(0).getAddressEntity().getAddressName(), containsString("address"));
+        Assert.assertThat(userDtos.get(1).getEmail(), containsString("bb"));
+        Assert.assertThat(userDtos.get(0).getName(), containsString("name"));
+        Assert.assertThat(userDtos.get(1).getName(), containsString("name2"));
+    }
+
+
+    @Test
+    public void testCopierList4() {
         List<UserEntity> userEntities = new ArrayList<>();
         List<UserDto> userDtos = AsuraBeanUtils.copyProperties(userEntities, UserDto.class);
         List<UserDto> userDtos1 = AsuraBeanUtils.copyProperties(null, UserDto.class);
@@ -127,7 +158,7 @@ public class AsuraBeanUtilsTest {
 
 
     @Test(expected = BeanUtilsCopyException.class)
-    public void testCopierList4() {
+    public void testCopierList5() {
         AddressEntity entity = new AddressEntity();
         entity.setAddreddId(1);
         entity.setAddressName("address name");

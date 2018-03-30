@@ -3,6 +3,7 @@
  */
 package org.asuraframework.commons.date;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -28,6 +29,7 @@ public class DateFormatterTest {
         String d5 = DateFormatter.format(new Date(), "yyyyMMdd HH:mm:ss");
         String d6 = DateFormatter.format(new Date(), "yyyyMMdd HH:mm:ss.SSS");
         String d7 = DateFormatter.format(new Date(), DatePattern.DEFAULT_ISO8601_FORMAT);
+        String d8 = DateFormatter.format(null, DatePattern.DEFAULT_ISO8601_FORMAT);
         Assert.assertNotNull(d0);
         Assert.assertNotNull(d1);
         Assert.assertNotNull(d2);
@@ -36,6 +38,20 @@ public class DateFormatterTest {
         Assert.assertNotNull(d5);
         Assert.assertNotNull(d6);
         Assert.assertNotNull(d7);
+        Assert.assertEquals("",d8);
+    }
+
+    @Test
+    public void formatter2Test() {
+        String d1 = DateFormatter.formatDate(new Date());
+        String d2 = DateFormatter.formatDate(1L);
+        String d3 = DateFormatter.formatDateTime(new Date());
+        String d4 = DateFormatter.formatDateTime(1L);
+        Assert.assertNotNull(d1, CoreMatchers.containsString("1970"));
+        Assert.assertNotNull(d1, CoreMatchers.containsString("1970"));
+        Assert.assertNotNull(d2, CoreMatchers.containsString("1970"));
+        Assert.assertNotNull(d3, CoreMatchers.containsString("1970"));
+        Assert.assertNotNull(d4, CoreMatchers.containsString("1970"));
     }
 
 }

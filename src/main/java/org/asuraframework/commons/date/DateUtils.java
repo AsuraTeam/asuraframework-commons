@@ -32,7 +32,6 @@ public class DateUtils {
 
 
     private DateUtils() {
-
     }
 
     public static Builder builder() {
