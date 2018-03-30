@@ -96,7 +96,7 @@ public class AsuraBeanUtils {
     }
 
     /**
-     * 这里不考虑多线程常见BeanCopier问题
+     * 这里不考虑多线程创建BeanCopier问题
      *
      * @param originClass
      * @param targetClass
