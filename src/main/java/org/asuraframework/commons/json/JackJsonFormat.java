@@ -5,10 +5,7 @@ package org.asuraframework.commons.json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.*;
 import org.asuraframework.commons.date.DatePattern;
 import org.asuraframework.commons.exception.JsonTransformException;
 import org.asuraframework.commons.util.Check;
@@ -184,6 +181,21 @@ public class JackJsonFormat implements JsonInterface {
         }
         try {
             return objectMapper.readValue(pathJson, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new JsonTransformException("将json串内的某一个path下的json串转换为 object 时出现异常。", e);
+        } catch (IOException e) {
+            throw new JsonTransformException("将json串内的某一个path下的json串转换为 object 时出现异常。", e);
+        }
+    }
+
+    @Override
+    public  <T> T getPathObject(@Nonnull String json, @Nonnull JavaType javaType, @Nullable String... paths) {
+        String pathJson = getString(json, paths);
+        if (Check.isNull(pathJson)) {
+            return null;
+        }
+        try {
+            return objectMapper.readValue(pathJson, javaType);
         } catch (JsonProcessingException e) {
             throw new JsonTransformException("将json串内的某一个path下的json串转换为 object 时出现异常。", e);
         } catch (IOException e) {

@@ -4,6 +4,7 @@
 package org.asuraframework.commons.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import javax.annotation.Nullable;
 import javax.annotation.Nonnull;
@@ -107,6 +108,18 @@ public class Json {
      */
     public static <T> T getPathObject(@Nonnull String json, @Nonnull TypeReference typeReference, @Nullable String... paths) {
         return createProduct().getPathObject(json,typeReference,paths);
+    }
+
+    /**
+     *
+     * @param json
+     * @param javaType
+     * @param paths
+     * @param <T>
+     * @return
+     */
+    public static <T> T getPathObject(@Nonnull String json, @Nonnull JavaType javaType, @Nullable String... paths) {
+        return createProduct().getPathObject(json,javaType,paths);
     }
     /**
      * 将json串内的某一个path下的json串转换为 List

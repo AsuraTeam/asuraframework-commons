@@ -1,8 +1,11 @@
 package org.asuraframework.commons.json;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -85,7 +88,15 @@ public interface JsonInterface {
      */
     <T> T getPathObject( String json,  TypeReference typeReference,  String... paths);
 
-
+    /**
+     * 将json串内的某一个path下的json串转换为 object
+     * @param json
+     * @param javaType
+     * @param paths
+     * @param <T>
+     * @return
+     */
+    <T> T getPathObject(@Nonnull String json, @Nonnull JavaType javaType, @Nullable String... paths);
     /**
      * 将json串内的某一个path下的json串转换为 List
      *
