@@ -6,6 +6,7 @@ package org.asuraframework.commons.util;
 /**
  * <p>
  *     bean copy异常处理，继承RuntimeException
+ *     将检测异常转化位非检测异常
  * </p>
  *
  * @author liusq23
